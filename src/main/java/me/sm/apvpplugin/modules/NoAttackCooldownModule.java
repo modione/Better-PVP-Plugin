@@ -1,6 +1,7 @@
 package me.sm.apvpplugin.modules;
 
 import me.sm.apvpplugin.base.AbstractModule;
+import me.sm.apvpplugin.utils.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -11,10 +12,13 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Objects;
 
 public class NoAttackCooldownModule extends AbstractModule {
-    public double cooldown = 1024;
-    public NoAttackCooldownModule() {
+    public double cooldown;
+
+    public NoAttackCooldownModule(FileConfig config) {
+        cooldown = config.getBoolean("no-attack-cooldown-enabled") ? 4.0 : 1024.0;
         setAttackCooldown(cooldown);
     }
+
     public void setAttackCooldown(double cooldown) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             AttributeInstance attribute = player.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
@@ -30,5 +34,10 @@ public class NoAttackCooldownModule extends AbstractModule {
     @Override
     public String getName() {
         return "No Attack CoolDown";
+    }
+
+    @Override
+    public boolean isEnabled(FileConfig config) {
+        return true; // Is always enabled in order to normalize attack_speed base values
     }
 }
