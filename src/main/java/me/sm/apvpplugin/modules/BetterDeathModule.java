@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class BetterDeathModule extends AbstractModule {
     private Sound soundOther;
@@ -37,11 +38,25 @@ public class BetterDeathModule extends AbstractModule {
         if(event.getEntityType() != EntityType.PLAYER) return;
         Player player = (Player) event.getEntity();
         if(event.getFinalDamage() < player.getHealth()) return;
-        Boolean keepInventory = event.getEntity().getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
+        event.setCancelled(true);
+        killPLayer(player);
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent event) {
+        if(event.getTo() == null || event.getTo().getBlockY() > -60) return;
+        Player player = event.getPlayer();
+        Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
+        player.teleport(spawn);
+        killPLayer(player);
+    }
+
+    public void killPLayer(Player player) {
+        if(player.getGameMode() == GameMode.SPECTATOR) return;
+        Boolean keepInventory = player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
         if(keepInventory != null && keepInventory) player.getInventory().clear();
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         Bukkit.broadcastMessage(String.format("%s died...", player.getName())); // TODO implement custom death messages
-        event.setCancelled(true);
         player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         player.setFoodLevel(20);
         player.sendTitle(title, subtitle, 10, 20, 10);
@@ -59,12 +74,13 @@ public class BetterDeathModule extends AbstractModule {
         } else {
             GameMode before = player.getGameMode();
             player.setGameMode(GameMode.SPECTATOR);
+            boolean isInvulnerable = player.isInvulnerable();
+            player.setInvulnerable(true);
             Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
                 if(!player.isOnline()) return;
                 player.teleport(spawn);
                 player.setGameMode(before);
-                if(!player.isInvulnerable()) {
-                    player.setInvulnerable(true);
+                if(!isInvulnerable) {
                     Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
                         if(!player.isOnline()) return;
                         player.setInvulnerable(false);
