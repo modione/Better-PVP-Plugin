@@ -25,6 +25,6 @@ public class ShowHPModule extends AbstractModule {
     }
     @Override
     public String getName() {
-        return "ShowHPonRangedHit";
+        return "Show HP on Arrow Hit";
     }
 }

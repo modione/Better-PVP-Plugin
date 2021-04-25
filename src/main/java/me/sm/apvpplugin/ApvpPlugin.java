@@ -5,6 +5,7 @@ import me.sm.apvpplugin.base.AbstractModule;
 import me.sm.apvpplugin.modules.BetterDeathModule;
 import me.sm.apvpplugin.modules.DisableShieldsModule;
 import me.sm.apvpplugin.modules.NoAttackCooldownModule;
+import me.sm.apvpplugin.modules.ShowHPModule;
 import me.sm.apvpplugin.utils.FileConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,6 +33,7 @@ public final class ApvpPlugin extends JavaPlugin {
         registerModule(new DisableShieldsModule());
         registerModule(new BetterDeathModule(config));
         registerModule(new NoAttackCooldownModule());
+        registerModule(new ShowHPModule());
     }
 
     public void unregister() {
