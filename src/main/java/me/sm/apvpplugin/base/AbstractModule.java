@@ -3,7 +3,6 @@ package me.sm.apvpplugin.base;
 import javax.naming.ConfigurationException;
 
 import me.sm.apvpplugin.utils.FileConfig;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.event.Listener;
 
 public abstract class AbstractModule implements Listener {
