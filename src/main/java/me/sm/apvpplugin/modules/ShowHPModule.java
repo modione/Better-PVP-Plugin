@@ -21,7 +21,7 @@ public class ShowHPModule extends AbstractModule {
         double health = entity.getHealth()-event.getDamage();
         if (health<=0) return;
         if (player==entity) return;
-        player.sendMessage(entity.getName()+ChatColor.AQUA+" is on " +ChatColor.RED+((int)health)+ChatColor.AQUA+" hp");
+        player.sendMessage(entity.getName()+ChatColor.AQUA+" is on " +ChatColor.RED+ Math.round(health) +ChatColor.AQUA+" hp");
     }
     @Override
     public String getName() {
