@@ -7,3 +7,4 @@ better-death:
   title: §cYou died!
   subtitle: §cRespawning...
   timeout: 0
+  protection-time: 0
