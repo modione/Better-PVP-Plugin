@@ -51,6 +51,7 @@ public class BetterDeathModule extends AbstractModule {
             GameMode before = player.getGameMode();
             player.setGameMode(GameMode.SPECTATOR);
             Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
+                if(!player.isOnline()) return;
                 player.teleport(spawn);
                 player.setGameMode(before);
             }, timeout * 20L);
