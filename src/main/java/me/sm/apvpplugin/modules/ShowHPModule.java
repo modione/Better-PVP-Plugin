@@ -6,10 +6,11 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class ShowHPModule extends AbstractModule {
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void on_BowHit(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         if (!(event.getDamager() instanceof Arrow)) return;
