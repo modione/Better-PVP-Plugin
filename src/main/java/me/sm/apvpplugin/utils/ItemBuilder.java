@@ -15,8 +15,6 @@
 package me.sm.apvpplugin.utils;
 
 import com.google.gson.Gson;
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -29,7 +27,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.material.MaterialData;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -403,29 +400,6 @@ public class ItemBuilder {
             smeta.setOwner(user);
             meta = smeta;
         }
-        return this;
-    }
-
-    public ItemBuilder texture(String texture) {
-        if (material != Material.PLAYER_HEAD)
-            return this;
-
-        String url = "http://textures.minecraft.net/texture/" + texture;
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
-        byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
-        profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
-        try {
-            SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-            if (skullMeta == null)
-                throw new NullPointerException("SkullMeta is Null");
-            Field profileField = skullMeta.getClass().getDeclaredField("profile");
-            profileField.setAccessible(true);
-            profileField.set(skullMeta, profile);
-            item.setItemMeta(skullMeta);
-        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
-            e1.printStackTrace();
-        }
-
         return this;
     }
 
