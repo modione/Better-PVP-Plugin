@@ -51,6 +51,12 @@ public class BetterDeathModule extends AbstractModule {
         Player player = (Player) event.getEntity();
         if(event.getFinalDamage() < player.getHealth()) return;
         event.setCancelled(true);
+        Boolean keepInventory = player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
+        if(keepInventory != null && !keepInventory) {
+            player.getInventory().forEach(item -> {if(item != null) player.getWorld().dropItemNaturally(player.getLocation(), item);});
+            player.getInventory().clear();
+            player.updateInventory();
+        }
         killPLayer(player);
         if(event instanceof EntityDamageByEntityEvent) {
             broadcastDeathMessage(player, ((EntityDamageByEntityEvent) event).getDamager());
@@ -63,6 +69,11 @@ public class BetterDeathModule extends AbstractModule {
     public void onPlayerMove(PlayerMoveEvent event) {
         if(event.getTo() == null || event.getTo().getBlockY() > -60) return;
         Player player = event.getPlayer();
+        Boolean keepInventory = player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
+        if(keepInventory != null && !keepInventory) {
+            player.getInventory().clear();
+            player.updateInventory();
+        }
         Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
         player.teleport(spawn);
         killPLayer(player);
@@ -71,13 +82,6 @@ public class BetterDeathModule extends AbstractModule {
 
     public void killPLayer(Player player) {
         if(player.getGameMode() == GameMode.SPECTATOR) return;
-        Boolean keepInventory = player.getWorld().getGameRuleValue(GameRule.KEEP_INVENTORY);
-        if(keepInventory != null && keepInventory) player.getInventory().clear();
-        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-        player.setFoodLevel(20);
-        player.sendTitle(title, subtitle, 10, 20, 10);
-        Bukkit.getOnlinePlayers().stream().filter(p -> !p.equals(player)).forEach(p -> p.playSound(player.getLocation(), soundOther, SoundCategory.PLAYERS,1.0f, 1.0f));
         Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
         if(timeout <= 0) {
             player.teleport(spawn);
@@ -105,6 +109,11 @@ public class BetterDeathModule extends AbstractModule {
                 }
             }, timeout * 20L);
         }
+        player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+        player.setFoodLevel(20);
+        player.sendTitle(title, subtitle, 10, 20, 10);
+        Bukkit.getOnlinePlayers().stream().filter(p -> !p.equals(player)).forEach(p -> p.playSound(player.getLocation(), soundOther, SoundCategory.PLAYERS,1.0f, 1.0f));
         player.playSound(player.getLocation(), soundSelf, SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
