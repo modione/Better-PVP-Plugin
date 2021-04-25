@@ -1,2 +1,9 @@
 no-attack-cooldown-enabled: true
 disable-shields-enabled: true
+better-death-enabled: true
+better-death:
+  sound-other: ENTITY_PLAYER_DEATH
+  sound-self: ENTITY_PLAYER_DEATH
+  title: §cYou died!
+  subtitle: §cRespawning...
+  timeout: 0
