@@ -15,7 +15,6 @@ public final class ApvpPlugin extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         saveDefaultConfig();
-        System.out.println(getDataFolder().toPath().resolve("config.yml").toString());
         config = new FileConfig(getDataFolder().toPath().resolve("config.yml").toString());
         this.register();
     }
