@@ -1,4 +1,4 @@
-# APvP Plugin
+# Apvp Plugin
 
 ## Features
 - No Cooldown on Hits (like in 1.8 PvP)
