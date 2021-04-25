@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package utils;
+package me.sm.apvpplugin.utils;
 
 import com.google.gson.Gson;
 import com.mojang.authlib.GameProfile;

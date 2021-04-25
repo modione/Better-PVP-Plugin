@@ -1,4 +1,4 @@
-package utils;
+package me.sm.apvpplugin.utils;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
