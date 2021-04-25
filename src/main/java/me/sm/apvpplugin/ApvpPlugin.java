@@ -2,6 +2,7 @@ package me.sm.apvpplugin;
 
 import java.util.logging.Level;
 import me.sm.apvpplugin.base.AbstractModule;
+import me.sm.apvpplugin.commands.PvpCommand;
 import me.sm.apvpplugin.modules.BetterDeathModule;
 import me.sm.apvpplugin.modules.DisableShieldsModule;
 import me.sm.apvpplugin.modules.NoAttackCooldownModule;
@@ -29,6 +30,7 @@ public final class ApvpPlugin extends JavaPlugin {
     }
 
     public void register() {
+        Bukkit.getPluginCommand("pvp").setExecutor(new PvpCommand());
         registerModule(new NoAttackCooldownModule(config));
         registerModule(new DisableShieldsModule());
         registerModule(new BetterDeathModule(config));

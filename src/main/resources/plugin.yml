@@ -5,3 +5,10 @@ api-version: 1.16
 authors:
   - modione
   - someron
+commands:
+  pvp:
+    permission: apvp.setpvp
+
+permissions:
+  apvp.setpvp:
+    default: op
