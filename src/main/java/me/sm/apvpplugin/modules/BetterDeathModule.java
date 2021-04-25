@@ -26,6 +26,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,6 +78,13 @@ public class BetterDeathModule extends AbstractModule {
             player.getInventory().forEach(item -> {if(item != null) player.getWorld().dropItemNaturally(player.getLocation(), item);});
             player.getInventory().clear();
             player.updateInventory();
+            float exp = player.getExp();
+            ExperienceOrb orb = ((ExperienceOrb) player.getWorld().spawnEntity(player.getLocation(), EntityType.EXPERIENCE_ORB));
+            if(player.getLevel() > 14) {
+                orb.setExperience(200);
+            } else {
+                orb.setExperience(Math.round(exp / 2));
+            }
         }
         playDeathEffect(player, deathEffectType);
         killPLayer(player);
@@ -95,6 +103,7 @@ public class BetterDeathModule extends AbstractModule {
         if(keepInventory != null && !keepInventory) {
             player.getInventory().clear();
             player.updateInventory();
+            player.setExp(0.0f);
         }
         Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
         player.teleport(spawn);
@@ -104,41 +113,43 @@ public class BetterDeathModule extends AbstractModule {
 
     public void killPLayer(Player player) {
         if(spectators.contains(player.getUniqueId())) return;
-        Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
-        if(timeout <= 0) {
-            player.teleport(spawn);
-            if(!player.isInvulnerable()) {
-                player.setInvulnerable(true);
-                Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
-                    if(!player.isOnline()) return;
-                    player.setInvulnerable(false);
-                }, protectionTime * 20L);
-            }
-        } else {
-            GameMode before = player.getGameMode();
-            player.setGameMode(GameMode.SPECTATOR);
-            boolean isInvulnerable = player.isInvulnerable();
-            player.setInvulnerable(true);
-            spectators.add(player.getUniqueId());
-            Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
-                spectators.remove(player.getUniqueId());
-                if(!player.isOnline()) return;
-                player.teleport(spawn);
-                player.setGameMode(before);
-                if(!isInvulnerable) {
-                    Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
-                        if(!player.isOnline()) return;
-                        player.setInvulnerable(false);
-                    }, protectionTime * 20L);
-                }
-            }, timeout * 20L);
-        }
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
         player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
         player.setFoodLevel(20);
         player.sendTitle(title, subtitle, 10, 20, 10);
         Bukkit.getOnlinePlayers().stream().filter(p -> !p.equals(player)).forEach(p -> p.playSound(player.getLocation(), soundOther, SoundCategory.PLAYERS,1.0f, 1.0f));
         player.playSound(player.getLocation(), soundSelf, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if(!Bukkit.isHardcore()) {
+            Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
+            if(timeout <= 0) {
+                player.teleport(spawn);
+                if(!player.isInvulnerable()) {
+                    player.setInvulnerable(true);
+                    Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
+                        if(!player.isOnline()) return;
+                        player.setInvulnerable(false);
+                    }, protectionTime * 20L);
+                }
+            } else {
+                GameMode before = player.getGameMode();
+                player.setGameMode(GameMode.SPECTATOR);
+                boolean isInvulnerable = player.isInvulnerable();
+                player.setInvulnerable(true);
+                spectators.add(player.getUniqueId());
+                Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
+                    spectators.remove(player.getUniqueId());
+                    if(!player.isOnline()) return;
+                    player.teleport(spawn);
+                    player.setGameMode(before);
+                    if(!isInvulnerable) {
+                        Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
+                            if(!player.isOnline()) return;
+                            player.setInvulnerable(false);
+                        }, protectionTime * 20L);
+                    }
+                }, timeout * 20L);
+            }
+        }
     }
 
     public void broadcastDeathMessage(Player player, Entity damager) {
