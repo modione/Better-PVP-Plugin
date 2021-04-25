@@ -9,7 +9,7 @@ public class FileConfig extends YamlConfiguration {
     private final String path;
 
     public FileConfig(String name) {
-        path = "plugins/BackPackPlugin/" + name;
+        path = name;
         try {
             load(path);
         } catch (IOException | InvalidConfigurationException e) {
