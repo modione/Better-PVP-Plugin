@@ -6,7 +6,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerInteractEvent;;
 import org.bukkit.inventory.ItemStack;
 
 public class DisableShieldsModule extends AbstractModule {
