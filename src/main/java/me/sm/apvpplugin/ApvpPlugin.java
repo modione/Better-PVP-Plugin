@@ -31,6 +31,7 @@ public final class ApvpPlugin extends JavaPlugin {
         registerModule(new NoAttackCooldownModule());
         registerModule(new DisableShieldsModule());
         registerModule(new BetterDeathModule(config));
+        registerModule(new NoAttackCooldownModule());
     }
 
     public void unregister() {
