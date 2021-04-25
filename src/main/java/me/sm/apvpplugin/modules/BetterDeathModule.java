@@ -1,48 +1,69 @@
 package me.sm.apvpplugin.modules;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
+import java.util.logging.Level;
+import javax.naming.ConfigurationException;
 import me.sm.apvpplugin.ApvpPlugin;
 import me.sm.apvpplugin.base.AbstractModule;
 import me.sm.apvpplugin.utils.FileConfig;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
+import org.bukkit.FireworkEffect.Type;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 public class BetterDeathModule extends AbstractModule {
-    private final Sound soundOther;
-    private final Sound soundSelf;
-    private final String title;
-    private final String subtitle;
-    private final long timeout;
-    private final long protectionTime;
-    private final List<String> pvpMessages;
-    private final List<String> genericMessages;
+    private Sound soundOther;
+    private Sound soundSelf;
+    private String title;
+    private String subtitle;
+    private long timeout;
+    private long protectionTime;
+    private List<String> pvpMessages;
+    private List<String> genericMessages;
+    private DeathEffectType deathEffectType;
+    private final List<UUID> spectators = new ArrayList<>();
     private final Random rng = new Random();
 
     public BetterDeathModule(FileConfig config) {
-        soundOther = Sound.valueOf(config.getString("better-death.sound-other"));
-        soundSelf = Sound.valueOf(config.getString("better-death.sound-self"));
-        title = config.getString("better-death.title");
-        subtitle = config.getString("better-death.subtitle");
-        timeout = config.getLong("better-death.timeout");
-        protectionTime = config.getLong("better-death.protection-time");
-        pvpMessages = config.getStringList("custom-deathmsgs.pvp");
-        genericMessages = config.getStringList("custom-deathmsgs.generic");
+        try {
+            soundOther = Sound.valueOf(config.getString("better-death.sound-other"));
+            soundSelf = Sound.valueOf(config.getString("better-death.sound-self"));
+            title = config.getString("better-death.title");
+            subtitle = config.getString("better-death.subtitle");
+            timeout = config.getLong("better-death.timeout");
+            protectionTime = config.getLong("better-death.protection-time");
+            System.out.println(config.getString("better-death.effect"));
+            deathEffectType = DeathEffectType.valueOf(config.getString("better-death.effect"));
+            pvpMessages = config.getStringList("custom-deathmsgs.pvp");
+            genericMessages = config.getStringList("custom-deathmsgs.generic");
+        } catch(Exception e) {
+            ApvpPlugin.instance.getLogger().log(Level.WARNING, "This is an configuration issue AND NOT A BUG! The module 'BetterDeath' could not be enabled because the config is invalid! (Try deleting the config.yml file and reloading/restarting your server!)", e);
+        }
     }
 
     @EventHandler
@@ -57,6 +78,7 @@ public class BetterDeathModule extends AbstractModule {
             player.getInventory().clear();
             player.updateInventory();
         }
+        playDeathEffect(player, deathEffectType);
         killPLayer(player);
         if(event instanceof EntityDamageByEntityEvent) {
             broadcastDeathMessage(player, ((EntityDamageByEntityEvent) event).getDamager());
@@ -81,7 +103,7 @@ public class BetterDeathModule extends AbstractModule {
     }
 
     public void killPLayer(Player player) {
-        if(player.getGameMode() == GameMode.SPECTATOR) return;
+        if(spectators.contains(player.getUniqueId())) return;
         Location spawn = player.getBedSpawnLocation() == null ? player.getWorld().getSpawnLocation() : player.getBedSpawnLocation();
         if(timeout <= 0) {
             player.teleport(spawn);
@@ -97,7 +119,9 @@ public class BetterDeathModule extends AbstractModule {
             player.setGameMode(GameMode.SPECTATOR);
             boolean isInvulnerable = player.isInvulnerable();
             player.setInvulnerable(true);
+            spectators.add(player.getUniqueId());
             Bukkit.getScheduler().runTaskLater(ApvpPlugin.instance, () -> {
+                spectators.remove(player.getUniqueId());
                 if(!player.isOnline()) return;
                 player.teleport(spawn);
                 player.setGameMode(before);
@@ -127,8 +151,46 @@ public class BetterDeathModule extends AbstractModule {
         }
     }
 
+    public void playDeathEffect(Player player, DeathEffectType type) {
+        switch(type) {
+            case VANILLA:
+                player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(), 10, 0.0, 0.0, 0.0);
+                break;
+            case LIGHTNING:
+                player.getWorld().strikeLightningEffect(player.getLocation());
+                break;
+            case EXPLOSION:
+                player.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, player.getLocation(), 1);
+                Bukkit.getOnlinePlayers().forEach(p -> p.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS,1.0f, 1.0f));
+                break;
+            case RIP:
+                AreaEffectCloud cloud = ((AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation(), EntityType.AREA_EFFECT_CLOUD));
+                cloud.setDuration(5 * 20);
+                cloud.setCustomName(ChatColor.RED + "R.I.P. " + ChatColor.GREEN + player.getName());
+                cloud.setCustomNameVisible(true);
+                cloud.setRadius(-0.0f);
+                break;
+            case FIREWORK:
+                Firework fw = ((Firework) player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
+                FireworkMeta meta = fw.getFireworkMeta();
+                meta.addEffect(FireworkEffect.builder().trail(rng.nextBoolean()).flicker(rng.nextBoolean())
+                    .with(Type.BALL_LARGE).withColor(Color.fromBGR(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256)))
+                    .withFade(Color.fromBGR(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256))).build());
+                meta.setPower(rng.nextInt(5));
+                fw.setFireworkMeta(meta);
+                break;
+            case RANDOM:
+                playDeathEffect(player, DeathEffectType.values()[rng.nextInt(DeathEffectType.values().length - 1)]);
+                break;
+        }
+    }
+
     @Override
     public String getName() {
         return "Better Death";
+    }
+
+    private enum DeathEffectType {
+        VANILLA, LIGHTNING, EXPLOSION, RIP, FIREWORK, RANDOM;
     }
 }

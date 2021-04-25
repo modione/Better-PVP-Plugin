@@ -9,6 +9,7 @@ better-death:
   subtitle: §cRespawning...
   timeout: 0
   protection-time: 0
+  effect: VANILLA
 custom-deathmsgs:
   pvp:
     - "%player% was yeeted by %killer%!"
