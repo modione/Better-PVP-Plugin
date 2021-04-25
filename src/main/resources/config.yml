@@ -8,3 +8,12 @@ better-death:
   subtitle: §cRespawning...
   timeout: 0
   protection-time: 0
+custom-deathmsgs:
+  pvp:
+    - "%player% was yeeted by %killer%!"
+    - "%player% was killed by %killer%. Wow."
+    - "%killer% hit %player% a bit too hard."
+  generic:
+    - "%player% died."
+    - "%player% had a bad day."
+    - "Where did %player% go? Anyone?"
