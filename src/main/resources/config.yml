@@ -2,6 +2,14 @@ no-attack-cooldown-enabled: true
 disable-shields-enabled: true
 better-death-enabled: true
 show-hp-on-arrow-hit-enabled: true
+show-health-above-player-enabled: true
+show-hp-ranged:
+  show-on-mobs: false
+show-hp-above:
+  show-on-tab: true
+  show-above: true
+  name-of-team: §bHitPoints
+  color-of-tab-hp: §c
 better-death:
   sound-other: ENTITY_PLAYER_DEATH
   sound-self: ENTITY_PLAYER_DEATH

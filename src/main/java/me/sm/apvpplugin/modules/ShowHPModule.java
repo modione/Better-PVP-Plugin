@@ -1,6 +1,7 @@
 package me.sm.apvpplugin.modules;
 
 import me.sm.apvpplugin.base.AbstractModule;
+import me.sm.apvpplugin.utils.FileConfig;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -10,9 +11,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class ShowHPModule extends AbstractModule {
+    private final boolean showonmobs;
+    public ShowHPModule(FileConfig config) {
+        showonmobs = config.getBoolean("show-hp-ranged.show-on-mobs");
+    }
     @EventHandler(priority = EventPriority.LOW)
     public void on_BowHit(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)&&!showonmobs) return;
         if (!(event.getDamager() instanceof Arrow)) return;
         if (event.getEntity().isDead()) return;
         Arrow arrow = (Arrow) event.getDamager();
