@@ -15,7 +15,7 @@ public class NoAttackCooldownModule extends AbstractModule {
     public double cooldown;
 
     public NoAttackCooldownModule(FileConfig config) {
-        cooldown = config.getBoolean("no-attack-cooldown-enabled") ? 4.0 : 1024.0;
+        cooldown = config.getBoolean("no-attack-cooldown-enabled") ? 1024.0 : 4.0;
         setAttackCooldown(cooldown);
     }
 
