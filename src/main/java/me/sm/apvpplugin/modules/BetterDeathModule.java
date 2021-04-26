@@ -175,7 +175,7 @@ public class BetterDeathModule extends AbstractModule {
                 Bukkit.getOnlinePlayers().forEach(p -> p.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS,1.0f, 1.0f));
                 break;
             case RIP:
-                AreaEffectCloud cloud = ((AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation(), EntityType.AREA_EFFECT_CLOUD));
+                AreaEffectCloud cloud = ((AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation().add(0.0, 0.25, 0.0), EntityType.AREA_EFFECT_CLOUD));
                 cloud.setDuration(5 * 20);
                 cloud.setCustomName(ChatColor.RED + "R.I.P. " + ChatColor.GREEN + player.getName());
                 cloud.setCustomNameVisible(true);
@@ -185,9 +185,9 @@ public class BetterDeathModule extends AbstractModule {
                 Firework fw = ((Firework) player.getWorld().spawnEntity(player.getLocation(), EntityType.FIREWORK));
                 FireworkMeta meta = fw.getFireworkMeta();
                 meta.addEffect(FireworkEffect.builder().trail(rng.nextBoolean()).flicker(rng.nextBoolean())
-                    .with(Type.BALL_LARGE).withColor(Color.fromBGR(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256)))
+                    .with(Type.values()[rng.nextInt(Type.values().length)]).withColor(Color.fromBGR(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256)))
                     .withFade(Color.fromBGR(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256))).build());
-                meta.setPower(rng.nextInt(5));
+                meta.setPower(2 + rng.nextInt(5));
                 fw.setFireworkMeta(meta);
                 break;
             case RANDOM:
