@@ -4,6 +4,7 @@ import me.sm.apvpplugin.ApvpPlugin;
 import me.sm.apvpplugin.base.AbstractModule;
 import me.sm.apvpplugin.utils.FileConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
@@ -39,6 +40,9 @@ public class HealthDisplayModule extends AbstractModule {
         }
         if (showtab) {
             colortab = config.getString("show-hp-above.hp-color");
+            if (colortab == null) {
+                colortab = ChatColor.RED.name();
+            }
             Bukkit.getScheduler().scheduleSyncRepeatingTask(ApvpPlugin.instance, ()-> {
                 for (Player player : Bukkit.getOnlinePlayers()) {
                     String namea = player.getDisplayName();
