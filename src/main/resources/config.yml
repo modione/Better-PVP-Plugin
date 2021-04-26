@@ -3,6 +3,7 @@ disable-shields-enabled: true
 better-death-enabled: true
 show-hp-on-arrow-hit-enabled: true
 show-health-above-player-enabled: true
+attribute-override-enabled: true
 show-hp-ranged:
   show-on-mobs: false
 show-hp-above:
@@ -18,6 +19,10 @@ better-death:
   timeout: 0
   protection-time: 0
   effect: VANILLA
+attribute-override:
+  attack-damage: 6.969696969696969696969696
+  knockback-resistance: 0.0
+  armor: 30
 custom-deathmsgs:
   pvp:
     - "%player% was yeeted by %killer%!"

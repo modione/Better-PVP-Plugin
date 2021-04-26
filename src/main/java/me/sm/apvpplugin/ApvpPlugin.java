@@ -33,6 +33,7 @@ public final class ApvpPlugin extends JavaPlugin {
         registerModule(new BetterDeathModule(config));
         registerModule(new ShowHPModule(config));
         registerModule(new HealthDisplayModule(config));
+        registerModule(new AttributeOverrideModule(config));
     }
 
     public void unregister() {
