@@ -1,5 +1,15 @@
+################################################################################################
+# Every value in this config file is toggleable. But changes in this file will only take affect
+# after reloading the server. You can use color codes in every text in this config like so:
+# §4 Dark Red; §c Red; §6 Gold; §e Yellow; §2 Dark Green; §a Green; §b Aqua; §3 Dark Aqua;
+# §1 Dark Blue; §9 Blue; §d Light Purple; §5 Dark Purple; §f White; §8 Dark Gray; §0 Black;
+################################################################################################
+
+# Toggles whether the PvP system is like 1.8 (true) or like 1.9 and above(false)
 no-attack-cooldown-enabled: true
+# Disables (true) or enables (false) shields
 disable-shields-enabled: true
+# Makes deaths a lot more customisable and better than vanilla
 better-death-enabled: true
 show-hp-on-arrow-hit-enabled: true
 show-health-above-player-enabled: true
@@ -12,22 +22,52 @@ show-hp-above:
   name-of-team: §bHitPoints
   color-of-tab-hp: §c
 better-death:
+  # The sound other players hear when a player dies nearby
   sound-other: ENTITY_PLAYER_DEATH
+  # The sound you hear when you die
   sound-self: ENTITY_PLAYER_DEATH
+  # The title you get on dying
   title: §cYou died!
+  # The Subtitle you get on dying
   subtitle: §cRespawning...
+  # How long it takes to respawn
   timeout: 0
+  # How long you will be immortal after respawning
   protection-time: 0
+  # The Death effect available effects are: VANILLA, LIGHTNING, EXPLOSION, RIP, FIREWORK and RANDOM
   effect: VANILLA
+# Shows you a message in chat how much hp your target has left
+show-hp-on-arrow-hit-enabled: true
+show-hp-ranged:
+  # Show the message on mobs
+  show-on-mobs: false
+# Shows the Hitpoints of a player under his name and on tab
+show-health-under-player-enabled: true
+show-hp-under:
+  # if Hitpoints should be shown on tab
+  show-on-tab: true
+  # if Hitpoints should be shown under player name
+  show-under: true
+  # The text that comes after the Hitpoints under a players' name
+  name-of-team: §bHitPoints
+  # The color of the Hitpoints on tab
+  color-of-tab-hp: §c
+# The deathmessages shown when customdeath is enabled
+
 attribute-override:
+  # The Attack damage you deal when hitting someone
   attack-damage: 6.969696969696969696969696
+  # The knockback resistance of the players
   knockback-resistance: 0.0
+  # The armor of every player
   armor: 30
 custom-deathmsgs:
+  # this messages are shown when a player gets killed by a Mob/Other Player
   pvp:
     - "%player% was yeeted by %killer%!"
     - "%player% was killed by %killer%. Wow."
     - "%killer% hit %player% a bit too hard."
+  # This messages are shown when the players dies for example: because of  falldamage, poison or hunger
   generic:
     - "%player% died."
     - "%player% had a bad day."

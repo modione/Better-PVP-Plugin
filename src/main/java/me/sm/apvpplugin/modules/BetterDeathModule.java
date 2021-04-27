@@ -26,6 +26,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -84,7 +85,15 @@ public class BetterDeathModule extends AbstractModule {
         playDeathEffect(player, deathEffectType);
         killPLayer(player);
         if(event instanceof EntityDamageByEntityEvent) {
-            broadcastDeathMessage(player, ((EntityDamageByEntityEvent) event).getDamager());
+            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+            if (!(damager instanceof LivingEntity)) {
+                try {
+                    damager = (Entity) ((Projectile) damager).getShooter();
+                }catch (ClassCastException e) {
+                    broadcastDeathMessage(player, null);
+                }
+            }
+            broadcastDeathMessage(player, damager);
         } else {
             broadcastDeathMessage(player, null);
         }
