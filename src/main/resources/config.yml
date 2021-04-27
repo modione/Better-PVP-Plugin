@@ -11,11 +11,8 @@ no-attack-cooldown-enabled: true
 disable-shields-enabled: true
 # Makes deaths a lot more customisable and better than vanilla
 better-death-enabled: true
-show-hp-on-arrow-hit-enabled: true
 show-health-above-player-enabled: true
 attribute-override-enabled: true
-show-hp-ranged:
-  show-on-mobs: false
 show-hp-above:
   show-on-tab: true
   show-above: true
