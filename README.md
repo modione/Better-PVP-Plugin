@@ -7,7 +7,7 @@
 - On hitting another player with a ranged weapon you get a message with that players HP ✔
 - Better Death (instant respawn without death screen) and cooldown ✔
 - Custom death messages ✔
-- Damage and Knockback multiplier
-- Toggleable PvP
+- Damage and Knockback multiplier ✔
+- Toggleable PvP ✔
 
 Every feature is optional and can be toggled in the settings.
