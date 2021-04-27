@@ -4,6 +4,7 @@
 # §4 Dark Red; §c Red; §6 Gold; §e Yellow; §2 Dark Green; §a Green; §b Aqua; §3 Dark Aqua;
 # §1 Dark Blue; §9 Blue; §d Light Purple; §5 Dark Purple; §f White; §8 Dark Gray; §0 Black;
 ################################################################################################
+
 # Toggles whether the PvP system is like 1.8 (true) or like 1.9 and above(false)
 no-attack-cooldown-enabled: true
 # Disables (true) or enables (false) shields
