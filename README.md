@@ -10,4 +10,4 @@
 - Damage and Knockback multiplier ✔
 - Toggleable PvP ✔
 
-Every feature is optional and can be toggled in the settings.
+Every feature is optional and can be toggled in the config file.
