@@ -19,10 +19,10 @@ public class HealthDisplayModule extends AbstractModule {
     String name;
     String colortab;
     public HealthDisplayModule(FileConfig config) {
-        showabove = config.getBoolean("show-hp-above.show-above");
-        showtab = config.getBoolean("show-hp-above.show-on-tab");
+        showabove = config.getBoolean("show-hp-under.show-under");
+        showtab = config.getBoolean("show-hp-under.show-on-tab");
         if (showabove) {
-            name = config.getString("show-hp-above.name-of-team");
+            name = config.getString("show-hp-under.name-of-team");
             assert name != null;
             if (scoreboard.getObjective(name) != null) {
                 objective = scoreboard.getObjective(name);
@@ -39,7 +39,7 @@ public class HealthDisplayModule extends AbstractModule {
             }, 10, 1);
         }
         if (showtab) {
-            colortab = config.getString("show-hp-above.hp-color");
+            colortab = config.getString("show-hp-under.hp-color");
             if (colortab == null) {
                 colortab = ChatColor.RED.name();
             }
@@ -54,6 +54,6 @@ public class HealthDisplayModule extends AbstractModule {
     }
     @Override
     public String getName() {
-        return "Show Health above Player";
+        return "Show Health under Player";
     }
 }
