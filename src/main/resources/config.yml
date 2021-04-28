@@ -9,7 +9,7 @@
 no-attack-cooldown-enabled: true
 # Disables (true) or enables (false) shields
 disable-shields-enabled: true
-# Makes deaths a lot more customisable and better than vanilla
+# Makes deaths a lot more customisable and better (instant respawn without death screen) than vanilla
 better-death-enabled: true
 show-health-above-player-enabled: true
 attribute-override-enabled: true
