@@ -54,7 +54,6 @@ public class BetterDeathModule extends AbstractModule {
             subtitle = config.getString("better-death.subtitle");
             timeout = config.getLong("better-death.timeout");
             protectionTime = config.getLong("better-death.protection-time");
-            System.out.println(config.getString("better-death.effect"));
             deathEffectType = DeathEffectType.valueOf(config.getString("better-death.effect"));
             pvpMessages = config.getStringList("custom-deathmsgs.pvp");
             genericMessages = config.getStringList("custom-deathmsgs.generic");
