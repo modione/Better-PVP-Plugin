@@ -41,7 +41,7 @@ public class HealthDisplayModule extends AbstractModule {
         if (showtab) {
             colortab = config.getString("show-hp-under.hp-color");
             if (colortab == null) {
-                colortab = ChatColor.RED.name();
+                colortab = "§c";
             }
             Bukkit.getScheduler().scheduleSyncRepeatingTask(ApvpPlugin.instance, ()-> {
                 for (Player player : Bukkit.getOnlinePlayers()) {

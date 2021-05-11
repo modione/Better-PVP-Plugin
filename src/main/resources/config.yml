@@ -17,7 +17,7 @@ show-hp-above:
   show-on-tab: true
   show-above: true
   name-of-team: §bHitPoints
-  color-of-tab-hp: §c
+  hp-color: §c
 better-death:
   # The sound other players hear when a player dies nearby
   sound-other: ENTITY_PLAYER_DEATH
