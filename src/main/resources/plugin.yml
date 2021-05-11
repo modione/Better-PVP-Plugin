@@ -1,4 +1,4 @@
-name: Apvp-Plugin
+name: BetterPVP-Plugin
 version: ${project.version}
 main: me.sm.apvpplugin.ApvpPlugin
 api-version: 1.16
